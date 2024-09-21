@@ -6,29 +6,242 @@
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 		<meta charset="utf-8"/>
         <meta name="viewport" content="viewport-fit=cover, user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
-        <link rel="icon" type="image/x-icon" href="images/favicon-128.png">
+
         <title>RGB UP!</title>
         <style>
-            
-            #headerScore{
-                border:2px #
-                border-radius:20px;
+            @import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+            @keyframes moving-tile{
+                0% { background-position: 0 0;}
+                100% {  background-position: 32220px 0;}
+            }
+            :root{
+                --main-color:#000000;
+                --main-color-accent:#00000025;
+            }
+
+            #headerScoreBackground{
+                border-radius:35px;
                 backdrop-filter: blur(4px);
+                color:white;
+                background-color:#fff5;
+                margin:auto;
+                max-width:30%;
+                min-width:75px;
+                font-family: "Black Han Sans", 'Trebuchet MS', Arial, sans-serif;
+                margin-top:1vh;
+            }
+            #headerScore{
+                padding:5px;
+                border-radius:35px;
+            }
+            #headerScoreText{
+                text-shadow: 0px 0px 3px black;
+                font-size:calc(10pt + 0.75vw);
+                text-align: center;
+                font-weight: bold;
+                letter-spacing: 6px;
+            }
+
+            #docBody, #gameBody, #backgroundTile{
+                width:100vw;
+                height:100vh;
+                overflow:hidden;
+                user-select: none;
+                background-color:var(--main-color);
+                transition:500ms linear;
+                margin:0;
+            }
+
+            #backgroundTile{
+                position:absolute;
+                left:-50vw;
+                top:-50vh;
+                background-image: url('images/backtile.png');
+                background-position: center;
+                background-blend-mode: overlay;
+                height:180vh;
+                width:180vw;
+                transform:rotate(10deg);
+                animation:moving-tile 18000s infinite linear;
+            }
+
+            #upgradesDrawer{
+                display:flex;
+                width:100%;
+                height:100%;
+                margin:auto;
+                background: linear-gradient(#fff3, #fff1);
+                border-radius:35px;
+                backdrop-filter: blur(4px);
+            }
+
+            #gameBottomUI{
+                position:absolute;
+                width:100%;
+                left:0;
+                bottom:calc(10px + 2.5vh);
+            }
+
+            #bodyContent{
+                width:85%;
+                height:55%;
+                margin:auto;
+                padding-top:6vh;
+
+            }
+            #switchButtonsContext{
+                padding-top:calc(16px + 2vh);
+                margin:auto;
+                width:80%;
+                display:flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-evenly;
+                align-content: space-between;
+                position:   relative;
+                z-index: 5;
+            }
+
+            #buttonMusicToggle{ left:0.75vw}
+            #buttonNewgroundsToggle{ right:0.75vw}
+
+            .accented-item{
+                outline:3px #fffa solid;
+                border:3px #0005 solid;
+                box-shadow: 0px 0px 15px #000a;
+                background-color: var(--main-color-accent);
+            }
+
+            .ui-button{
+                width:calc(30px + 0.75vw + 0.5vh);
+                height:calc(30px + 0.75vw + 0.5vh);
+                border-radius:50%;
+                background-color:#fff7;
+                margin:10px;
+                position: absolute;
+                bottom:calc(10px + 0.6vh);
+            }
+
+            .ui-button-classic{
+                width:calc(50px + 15vw);
+                background-color:#fff9;
+                border-radius:16px;
+                padding:8px;
+                box-shadow: 4px 3px 0px var(--main-color-accent);
+                transition: 500ms;
+                text-align: center;
+                font-family: Roboto, Arial, Helvetica, sans-serif;
+                font-weight: 600;
+                color: black !important;
+                text-shadow: none!important;
+                margin:auto;
+            }
+
+            .ui-button-classic:hover{
+                background-color:#fffa;
+                box-shadow: 8px 6px 0px black;
+                transition: 500ms;
+            }
+            #upgradeClickImage{background-image: url('images/up-click.png');}
+            #upgradeRubImage{background-image: url('images/up-move.png');}
+            #upgradeIdleImage{background-image: url('images/up-idle.png');}
+
+            #upgradeClickImage, #upgradeRubImage, #upgradeIdleImage{
+                height:calc(16px + 4vh);
+                width:calc(16px + 4vh);
+                background-size: contain;
+                border-radius:16px;
+                border:1px var(--main-color-accent) solid;
+                margin:auto;
+                background-color:#fff5;
+            }
+
+            #upgradeRub, #upgradeClick, #upgradeIdle{
+                padding:6px;
+                padding-top:calc(10px + 1.5vh);
+                min-width:33%;
+                display:flex;
+                flex-direction: column;
+                text-align: center;
+                text-shadow: 0px 1px 2px black;
+                color:white;
+                font-family:Roboto, Arial, Helvetica, sans-serif;
+            }
+
+            .upgrades-drawer-grid{
+                display:flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                width:98%;
+                margin:auto;
+            }
+
+            #upgradesDrawerGameplay, #upgradesDrawerHex{
+                min-width:100%;
+                min-height:100%;
+            }
+
+            #upgradeRubDesc, #upgradeClickDesc, #upgradeIdleDesc{
+                text-align: center;
+                text-wrap: pretty;
+                width:calc(30px + 77%);
+                margin:auto;
+                padding-bottom:5vh;
             }
         </style>
     </head>
     <body id="docBody">
+        <div id="backgroundTile"></div>
         <div id="gameBody">
-
             <div id="header">
-                <div id="headerScore">
-                    <div id="headerScoreText">
-                        #000000
+                <div id="headerScoreBackground" class="accented-item">
+                    <div id="headerScore">
+                        <div id="headerScoreText">#000000</div>
                     </div>
                 </div>
             </div>
+            
+            <div id="bodyContent">
+                <div id="upgradesDrawer" class="accented-item">
+                    <div id="upgradesDrawerGameplay">
+                        <div class="upgrades-drawer-grid">
+                            <div id="upgradeRub">
+                                <div id="upgradeRubImage"></div>
+                                <h2 id="upgradeRubTitle">Upgrade Rubbing</h2>
+                                <p id="upgradeRubDesc">Upgrade your rubbing power by 1 point!</p>
+                                <div id="upgradeRubBuy" class="ui-button-classic">Buy for xyz</div>
+                            </div>
+                            <div id="upgradeClick">
+                                <div id="upgradeClickImage"></div>
+                                <h2 id="upgradeClickTitle">Upgrade Clicking</h2>
+                                <p id="upgradeClickDesc">Upgrade your clicking power by 1 point!</p>
+                                <div id="upgradeClickBuy" class="ui-button-classic">Buy for Xyz</div>
+                            </div>
+                            <div id="upgradeIdle">
+                                <div id="upgradeIdleImage"></div>
+                                <h2 id="upgradeIdleTitle">Upgrade Idling</h2>
+                                <p id="upgradeIdleDesc">Upgrade your idle power by 6 points per second!</p>
+                                <div id="upgradeIdleBuy" class="ui-button-classic">Buy for Xyz</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="upgradesDrawerHex" >
+                        <div class="upgrades-drawer-grid">
+                            
+                        </div>
+                    </div>
+                </div>
+                <div id="switchButtonsContext">
+                    <div id="buttonTabHex" class="ui-button-classic accented-item">Hex Upgrades</div>
+                    <div id="buttonTabGame" class="ui-button-classic accented-item">Incremental Upgrades</div>
+                </div>
+            </div>
+            <div id="buttonMusicToggle" class="ui-button accented-item"></div>
+            <div id="buttonNewgroundsToggle" class="ui-button accented-item"></div>
+            <div id="gameBottomUI">
 
-
+            </div>
         </div>
     </body>
     <script>
@@ -39,86 +252,270 @@
         const score_max     =   [16,16,16,16,16,16] // 
         let hex_max         =   [9,9,9,9,9,9];      // What should our maximum be for each value in the hex? This can be upgraded to f.
         let hex_parsed      =   '';                 // What color hex value are we?
+        let score_old       = 0;
 
         // Our base stats.
         let incrementals    =   {
-            rub:0.1,
+            rub:5.1,
             click:1,
             idle:0,
             fairy:25
         }
 
         // Our counter of upgrades
-        let upgrades        =   {
+        let upgrades            =   {
             rub:0,
             click:0,
             idle:0,
             fairy:0
         }
 
-        // What should our hex code be? Transform our score into a valid hexcode for the user
-        function scoreToHex(){
-            let score_tmp = Math.floor(score_float);
+        let incrementals_active =   {
+            rub:true,
+            click:true,
+            idle:true,
+            fairy:false
+        }
 
-            score_float = score[5];     // Let's start it here.
+        const   hex_costs       =   {
+            0:[7340032, 8388608, 9437184, 10485760, 11534336, 12582912, 13631488],
+            1:[655360, 720896, 786432, 851986, 917504, 983040, 1048576],
+            2:[40960, 45056, 49152, 53248, 57344, 61440, 65536],
+            3:[2560, 2816, 3072, 3328, 3584, 3840, 4096],
+            4:[160 , 176, 192 , 208, 224, 240, 256],
+            5:[10 , 11 , 12 , 13, 14, 15, 16],
+        }
+
+        const   upgrade_costs_base = {
+            rub:50,
+            click:15,
+            idle:160,
+            fairy:256
+        }
+
+        // What should our hex code be? Transform our score into a valid hexcode for the user
+        function scoreToHex(float_value){
+
+            if(score_old == float_value) return null;
+
+            let score_tmp = float_value;
+            let score_arr = [0,0,0,0,0,0];
+
+            score_arr[5] = Math.max(0, Math.floor(score_tmp-1));     // Let's start it here.
             
             // How far over is our 6th value in our score?
-            while(score_tmp[5] > hex_max[5]){
-                score_tmp[4]++;                 // Add to our next in line score value
-                score_tmp[5] -= hex_max[5];     // Remove max value from our score value. 
+            while(score_arr[5] >= hex_max[5] ){
+                score_arr[4]++;                 // Add to our next in line score value
+                score_arr[5] -= hex_max[5];     // Remove max value from our score value. 
             }
 
             // How far over is our 5th value in our score?
-            while(score_tmp[4] > hex_max[4]){
-                score_tmp[3]++;                 // Add to our next in line score value
-                score_tmp[4] -= hex_max[4];     // Remove max value from our score value. 
+            while(score_arr[4] > hex_max[4]){
+                score_arr[3]++;                 // Add to our next in line score value
+                score_arr[4] -= hex_max[4];     // Remove max value from our score value. 
             }
 
             // How far over is our 4th value in our score?
-            while(score_tmp[3] > hex_max[3]){
-                score_tmp[2]++;                 // Add to our next in line score value
-                score_tmp[3] -= hex_max[3];     // Remove max value from our score value. 
+            while(score_arr[3] > hex_max[3]){
+                score_arr[2]++;                 // Add to our next in line score value
+                score_arr[3] -= hex_max[3];     // Remove max value from our score value. 
             }
 
             // How far over is our 3rd value in our score?
-            while(score_tmp[2] > hex_max[2]){
-                score_tmp[1]++;                 // Add to our next in line score value
-                score_tmp[2] -= hex_max[2];     // Remove max value from our score value. 
+            while(score_arr[2] > hex_max[2]){
+                score_arr[1]++;                 // Add to our next in line score value
+                score_arr[2] -= hex_max[2];     // Remove max value from our score value. 
             }
 
             // How far over is our 2nd value in our score?
-            while(score_tmp[1] > hex_max[1]){
-                score_tmp[0]++;                 // Add to our next in line score value
-                score_tmp[1] -= hex_max[1];     // Remove max value from our score value. 
+            while(score_arr[1] > hex_max[1]){
+                score_arr[0]++;                 // Add to our next in line score value
+                score_arr[1] -= hex_max[1];     // Remove max value from our score value. 
             }
 
             // How far over is our 1st value in our score?
-            while(score_tmp[0] > hex_max[0]){
-                console.log('yea you won!');
+            while(score_arr[0] > hex_max[0]){
+                if(float_value >= 16777216)console.log('yea you won!');
+                return null
             }
 
-            // Update global score array.
-            score = score_tmp;
+            // Time to convert our hex characters above 9 if permitting.
+            score_arr.forEach(hex => {
+                if(hex == 10) hex = 'a';
+                if(hex == 11) hex = 'b';
+                if(hex == 12) hex = 'c';
+                if(hex == 13) hex = 'd';
+                if(hex == 14) hex = 'e';
+                if(hex >= 15) hex = 'f';
+            });
+
+            score_old = float_value;
+            // Construct our hex value.
+            return [score_arr, `#${score_arr[0]}${score_arr[1]}${score_arr[2]}${score_arr[3]}${score_arr[4]}${score_arr[5]}`];
+        }
+        function scoreToHexUncapped(float_value){
+            let score_tmp = float_value;
+            let score_arr = [0,0,0,0,0,0];
+            score_arr[5] = Math.max(0, Math.floor(score_tmp-1));     // Let's start it here.
+
+
+            // How far over is our 6th value in our score?
+            while(score_arr[5] >= score_max[5] ){
+                score_arr[4]++;                 // Add to our next in line score value
+                score_arr[5] -= score_max[5];     // Remove max value from our score value. 
+            }
+            // How far over is our 5th value in our score?
+            while(score_arr[4] >= score_max[4]){
+                score_arr[3]++;                 // Add to our next in line score value
+                score_arr[4] -= score_max[4];     // Remove max value from our score value. 
+            }
+            // How far over is our 4th value in our score?
+            while(score_arr[3] >= score_max[3]){
+                score_arr[2]++;                 // Add to our next in line score value
+                score_arr[3] -= score_max[3];     // Remove max value from our score value. 
+            }
+            // How far over is our 3rd value in our score?
+            while(score_arr[2] >= score_max[2]){
+                score_arr[1]++;                 // Add to our next in line score value
+                score_arr[2] -= score_max[2];     // Remove max value from our score value. 
+            }
+            // How far over is our 2nd value in our score?
+            while(score_arr[1] >= score_max[1]){
+                score_arr[0]++;                 // Add to our next in line score value
+                score_arr[1] -= score_max[1];     // Remove max value from our score value. 
+            }
+            // How far over is our 1st value in our score?
+            while(score_arr[0] >= score_max[0]){
+                if(float_value > 16777216)console.log('yea you won!');
+                score_arr[0] -= score_max[0];
+            }
+            // Time to convert our hex characters above 9 if permitting.
+            score_arr.forEach((hex,i) => {
+                if(Number(hex) == 10) score_arr[i] = 'a';
+                if(Number(hex) == 11) score_arr[i] = 'b';
+                if(Number(hex) == 12) score_arr[i] = 'c';
+                if(Number(hex) == 13) score_arr[i] = 'd';
+                if(Number(hex) == 14) score_arr[i] = 'e';
+                if(Number(hex) >= 15) score_arr[i] = 'f';
+            });
+
+            // Construct our hex value.
+            return [score_arr, `#${score_arr[0]}${score_arr[1]}${score_arr[2]}${score_arr[3]}${score_arr[4]}${score_arr[5]}`];
         }
 
-
+        // Add to our score when screen is rubbed.
         function incrementByRub(){
+            if(incrementals_active.rub == false) return null    // We shouldn't do anything...
+
             let add = incrementals.rub*(1+upgrades.rub);  // calculate the increase.
 
             score_float += add; // Add new amount to our float score;
-            scoreToHex();       // Update visibility.
         }
 
+        // Add to score when screen is clicked.
         function incrementByClick(){
+            if(incrementals_active.click == false) return null    // We shouldn't do anything...
+    
+            let add = incrementals.click*(1+upgrades.click);  // calculate the increase.
 
+            score_float += add; // Add new amount to our float score;
         }
 
+        // Add to score when idling with active upgrade.
         function incrementByIdle(){
-
+            if(incrementals_active.idle == false) return null    // We shouldn't do anything...
+            score_float += Math.floor((incrementals.idle+upgrades.idle)*2)
         }
 
+        // Lucky you! Add to score when fairy is clicked on.
         function incrementByFairy(){
-
+            if(incrementals_active.fairy == false) return null    // We shouldn't do anything...
         }
+
+        // Well, something's gotta update all the colors!
+        function updateVisibility(color, accent){
+            document.documentElement.style.cssText = "--main-color:" + hex_parsed + "; --main-color-accent: " + hex_parsed + "35";
+
+            document.getElementById('headerScoreText').innerHTML = hex_parsed;
+        }
+
+        // Upgrade maybe?
+        function requestGameplayUpgrade(type){
+            let calc_cost;
+
+            // Rub upgrade
+            if(type == 'rub' || type == 1){
+                calc_cost =   Math.round(5 + (upgrade_costs_base.rub*(upgrades.rub+1/0.65)));
+                if(upgrades.rub > 25 ) calc_cost = Math.floor(calc_cost*1.15);
+                if(upgrades.rub > 50 ) calc_cost = Math.floor(calc_cost*1.4);
+                if(calc_cost > 11631488) calc_cost = 11330000;      // Max it out..
+                // We can buy it!
+                if(calc_cost <= score_float){
+                    score_float -= calc_cost;
+                    upgrades.rub++;
+                }
+
+                // Too expensive!
+                else{
+                    //todo
+                }
+            }
+    
+            // Click upgrade
+            if(type == 'click' || type == 2){
+                calc_cost =   Math.round(10 + (upgrade_costs_base.click*(upgrades.click+1/0.33)));
+                if(upgrades.click > 10 ) calc_cost = Math.floor(calc_cost*1.2);
+                if(upgrades.click > 30 ) calc_cost = Math.floor(calc_cost*1.3);
+                if(calc_cost > 8631488) calc_cost = 5000000;      // Max it out..
+                // We can buy it!
+                if(calc_cost <= score_float){
+                    score_float -= calc_cost;
+                    upgrades.click++;
+                }
+
+                // Too expensive!
+                else{
+                    //todo
+                }
+            }
+
+            // Idle upgrade
+            if(type == 'idle' || type == 3){
+                calc_cost =   Math.round(100 + (upgrade_costs_base.idle*(upgrades.idle+2/0.5)));
+                if(upgrades.click > 10 ) calc_cost = Math.floor(calc_cost*1.15);
+                if(upgrades.click > 20 ) calc_cost = Math.floor(calc_cost*1.2);
+                if(upgrades.click > 40 ) calc_cost = Math.floor(calc_cost*1.25);
+                if(calc_cost > 12631488) calc_cost = 12000000;      // Max it out..
+                // We can buy it!
+                if(calc_cost <= score_float){
+                    score_float -= calc_cost;
+                    upgrades.idle++;
+                }
+
+                // Too expensive!
+                else{
+                    //todo
+                }
+            }
+        }
+
+        // Add everything we need once everything is loaded in
+        function onLoaded(){
+            
+        }
+
+        document.getElementById('docBody').addEventListener('mousemove', function(){ incrementByRub(); } );   // Rubbing is active!
+        document.getElementById('docBody').addEventListener('click', function(){ incrementByClick(); } );   // Rubbing is active!
+
+        setInterval(() => {
+            let update = scoreToHex(score_float);
+            let accent = scoreToHexUncapped(score_float/2);
+            score_arr = update[0];      // Update the global score array
+            hex_parsed = update[1];      // Update global hex
+            updateVisibility(hex_parsed, accent[1]);
+
+            // Idle increment
+            incrementByIdle();
+        }, 350);
     </script>
 </html>
