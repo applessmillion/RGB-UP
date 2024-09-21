@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+		<meta charset="utf-8"/>
+        <meta name="viewport" content="viewport-fit=cover, user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+        <link rel="icon" type="image/x-icon" href="images/favicon-128.png">
+        <title>RGB UP!</title>
+        <style>
+            
+            #headerScore{
+                border:2px #
+                border-radius:20px;
+                backdrop-filter: blur(4px);
+            }
+        </style>
+    </head>
+    <body id="docBody">
+        <div id="gameBody">
+
+            <div id="header">
+                <div id="headerScore">
+                    <div id="headerScoreText">
+                        #000000
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </body>
+    <script>
+        //let score = 0;                  // Score minumum is 
+        //let score_max = 16777216;       // This would be #ffffff.
+        let score_float     =   0;                  // Let our scoreToHex translate to score. 
+        let score           =   [0,0,0,0,0,0];      // Score is 0 but we're using each value seperately.
+        const score_max     =   [16,16,16,16,16,16] // 
+        let hex_max         =   [9,9,9,9,9,9];      // What should our maximum be for each value in the hex? This can be upgraded to f.
+        let hex_parsed      =   '';                 // What color hex value are we?
+
+        // Our base stats.
+        let incrementals    =   {
+            rub:0.1,
+            click:1,
+            idle:0,
+            fairy:25
+        }
+
+        // Our counter of upgrades
+        let upgrades        =   {
+            rub:0,
+            click:0,
+            idle:0,
+            fairy:0
+        }
+
+        // What should our hex code be? Transform our score into a valid hexcode for the user
+        function scoreToHex(){
+            let score_tmp = Math.floor(score_float);
+
+            score_float = score[5];     // Let's start it here.
+            
+            // How far over is our 6th value in our score?
+            while(score_tmp[5] > hex_max[5]){
+                score_tmp[4]++;                 // Add to our next in line score value
+                score_tmp[5] -= hex_max[5];     // Remove max value from our score value. 
+            }
+
+            // How far over is our 5th value in our score?
+            while(score_tmp[4] > hex_max[4]){
+                score_tmp[3]++;                 // Add to our next in line score value
+                score_tmp[4] -= hex_max[4];     // Remove max value from our score value. 
+            }
+
+            // How far over is our 4th value in our score?
+            while(score_tmp[3] > hex_max[3]){
+                score_tmp[2]++;                 // Add to our next in line score value
+                score_tmp[3] -= hex_max[3];     // Remove max value from our score value. 
+            }
+
+            // How far over is our 3rd value in our score?
+            while(score_tmp[2] > hex_max[2]){
+                score_tmp[1]++;                 // Add to our next in line score value
+                score_tmp[2] -= hex_max[2];     // Remove max value from our score value. 
+            }
+
+            // How far over is our 2nd value in our score?
+            while(score_tmp[1] > hex_max[1]){
+                score_tmp[0]++;                 // Add to our next in line score value
+                score_tmp[1] -= hex_max[1];     // Remove max value from our score value. 
+            }
+
+            // How far over is our 1st value in our score?
+            while(score_tmp[0] > hex_max[0]){
+                console.log('yea you won!');
+            }
+
+            // Update global score array.
+            score = score_tmp;
+        }
+
+
+        function incrementByRub(){
+            let add = incrementals.rub*(1+upgrades.rub);  // calculate the increase.
+
+            score_float += add; // Add new amount to our float score;
+            scoreToHex();       // Update visibility.
+        }
+
+        function incrementByClick(){
+
+        }
+
+        function incrementByIdle(){
+
+        }
+
+        function incrementByFairy(){
+
+        }
+    </script>
+</html>
