@@ -21,7 +21,7 @@
 
             #headerScoreBackground{
                 border-radius:35px;
-                backdrop-filter: blur(4px);
+                backdrop-filter: blur(6px);
                 color:white;
                 background-color:#fff5;
                 margin:auto;
@@ -72,7 +72,7 @@
                 margin:auto;
                 background: linear-gradient(#fff3, #fff1);
                 border-radius:35px;
-                backdrop-filter: blur(4px);
+                backdrop-filter: blur(10px);
             }
 
             #gameBottomUI{
@@ -83,8 +83,8 @@
             }
 
             #bodyContent{
-                width:85%;
-                height:55%;
+                width:calc(80px + 55%);
+                height:65%;
                 margin:auto;
                 padding-top:6vh;
 
@@ -133,7 +133,7 @@
                 font-family: Roboto, Arial, Helvetica, sans-serif;
                 font-weight: 600;
                 color: black !important;
-                text-shadow: none!important;
+                text-shadow: 0px 1px 5px #fff8;
                 margin:auto;
             }
 
@@ -145,8 +145,20 @@
             #upgradeClickImage{background-image: url('images/up-click.png');}
             #upgradeRubImage{background-image: url('images/up-move.png');}
             #upgradeIdleImage{background-image: url('images/up-idle.png');}
+            .upgrade-hex-image-r{ background-image: url('images/hex-red.png'); }
+            .upgrade-hex-image-g{ background-image: url('images/hex-green.png'); }
+            .upgrade-hex-image-b{ background-image: url('images/hex-blue.png'); }
 
-            #upgradeClickImage, #upgradeRubImage, #upgradeIdleImage{
+            #buttonMusicToggle{ background-image: url('images/music-btn.png');}
+            #buttonNewgroundsToggle{ background-image: url('images/ng-btn.png');}
+
+            #buttonNewgroundsToggle, #buttonMusicToggle{
+                background-size: 95%;
+                background-position: center;
+                background-repeat: no-repeat;
+            }
+
+            #upgradeClickImage, #upgradeRubImage, #upgradeIdleImage,.upgrade-hex-image-r, .upgrade-hex-image-g, .upgrade-hex-image-b{
                 height:calc(16px + 4vh);
                 width:calc(16px + 4vh);
                 background-size: contain;
@@ -156,44 +168,67 @@
                 background-color:#fff5;
             }
 
-            #upgradeRub, #upgradeClick, #upgradeIdle{
-                padding:6px;
-                padding-top:calc(10px + 1.5vh);
-                min-width:33%;
+            #upgradeRub, #upgradeClick, #upgradeIdle, .upgrade-hex{
+                padding:calc(10px + 1.5vh);
+                min-width:32%;
                 display:flex;
                 flex-direction: column;
                 text-align: center;
                 text-shadow: 0px 1px 2px black;
                 color:white;
                 font-family:Roboto, Arial, Helvetica, sans-serif;
+                background-color:#fff2;
+                backdrop-filter: blur(6px);
+                border-radius:16px;
+                margin:8px;
+                margin-bottom:14px;
             }
 
+            #display-arrows{
+                background-image: url('images/arrows.png');
+                background-repeat: no-repeat;
+                background-position: center;
+                background-size: contain;
+                height:40px;
+                width:30px;
+                position: relative;
+                z-index:5;
+                left:8px;
+                top:50%;
+            }
             .upgrades-drawer-grid{
                 display:flex;
                 flex-direction: row;
                 align-items: center;
-                justify-content: space-between;
+                justify-content: space-evenly;
                 width:98%;
                 margin:auto;
+                flex-wrap: wrap;
             }
 
             #upgradesDrawerGameplay, #upgradesDrawerHex{
                 min-width:100%;
                 min-height:100%;
+                max-height:100%;
+                overflow:overlay;
+
+                -ms-overflow-style: none;  /* IE and Edge */
+                scrollbar-width: none;  /* Firefox */
             }
 
-            #upgradeRubDesc, #upgradeClickDesc, #upgradeIdleDesc{
+            #upgradeRubDesc, #upgradeClickDesc, #upgradeIdleDesc, .upgrade-hex-desc{
                 text-align: center;
                 text-wrap: pretty;
-                width:calc(30px + 77%);
+                width:calc(10px + 55%);
                 margin:auto;
-                padding-bottom:5vh;
+                padding-bottom:3vh;
+                font-size:0.9em;
             }
         </style>
     </head>
     <body id="docBody">
         <div id="backgroundTile"></div>
-        <div id="gameBody">
+        <div id="gameBody" style="opacity:0;transition:3s">
             <div id="header">
                 <div id="headerScoreBackground" class="accented-item">
                     <div id="headerScore">
@@ -201,8 +236,8 @@
                     </div>
                 </div>
             </div>
-            
             <div id="bodyContent">
+                <div id="display-arrows"></div>
                 <div id="upgradesDrawer" class="accented-item">
                     <div id="upgradesDrawerGameplay">
                         <div class="upgrades-drawer-grid">
@@ -228,7 +263,42 @@
                     </div>
                     <div id="upgradesDrawerHex" >
                         <div class="upgrades-drawer-grid">
-                            
+                            <div id="upgradeHex1" class="upgrade-hex">
+                                <div id="upgradeHex1Image" class="upgrade-hex-image-b"></div>
+                                <h2 id="upgradeHex1Title" class="upgrade-hex-title">Upgrade Max Value</h2>
+                                <p id="upgradeHex1Desc" class="upgrade-hex-desc">Upgrade value from #xxxxx9 to #xxxxxa!</p>
+                                <div id="upgradeHex1Buy" class="ui-button-classic upgrade-hex-btn">Buy for xyz</div>
+                            </div>
+                            <div id="upgradeHex2" class="upgrade-hex">
+                                <div id="upgradeHex2Image" class="upgrade-hex-image-b"></div>
+                                <h2 id="upgradeHex2Title" class="upgrade-hex-title">Upgrade Max Value</h2>
+                                <p id="upgradeHex2Desc" class="upgrade-hex-desc">Upgrade value from #xxxxx9 to #xxxxxa!</p>
+                                <div id="upgradeHex2Buy" class="ui-button-classic upgrade-hex-btn">Buy for xyz</div>
+                            </div>
+                            <div id="upgradeHex3" class="upgrade-hex">
+                                <div id="upgradeHex3Image" class="upgrade-hex-image-g"></div>
+                                <h2 id="upgradeHex3Title" class="upgrade-hex-title">Upgrade Max Value</h2>
+                                <p id="upgradeHex3Desc" class="upgrade-hex-desc">Upgrade value from #xxxxx9 to #xxxxxa!</p>
+                                <div id="upgradeHex3Buy" class="ui-button-classic upgrade-hex-btn">Buy for xyz</div>
+                            </div>
+                            <div id="upgradeHex4" class="upgrade-hex">
+                                <div id="upgradeHex4Image" class="upgrade-hex-image-g"></div>
+                                <h2 id="upgradeHex4Title" class="upgrade-hex-title">Upgrade Max Value</h2>
+                                <p id="upgradeHex4Desc" class="upgrade-hex-desc">Upgrade value from #xxxxx9 to #xxxxxa!</p>
+                                <div id="upgradeHex4Buy" class="ui-button-classic upgrade-hex-btn">Buy for xyz</div>
+                            </div>
+                            <div id="upgradeHex5" class="upgrade-hex">
+                                <div id="upgradeHex5Image" class="upgrade-hex-image-r"></div>
+                                <h2 id="upgradeHex5Title" class="upgrade-hex-title">Upgrade Max Value</h2>
+                                <p id="upgradeHex5Desc" class="upgrade-hex-desc">Upgrade value from #xxxxx9 to #xxxxxa!</p>
+                                <div id="upgradeHex5Buy" class="ui-button-classic upgrade-hex-btn">Buy for xyz</div>
+                            </div>
+                            <div id="upgradeHex6" class="upgrade-hex">
+                                <div id="upgradeHex6Image" class="upgrade-hex-image-r"></div>
+                                <h2 id="upgradeHex6Title" class="upgrade-hex-title">Upgrade Max Value</h2>
+                                <p id="upgradeHex6Desc" class="upgrade-hex-desc">Upgrade value from #xxxxx9 to #xxxxxa!</p>
+                                <div id="upgradeHex6Buy" class="ui-button-classic upgrade-hex-btn">Buy for xyz</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -252,11 +322,13 @@
         const score_max     =   [16,16,16,16,16,16] // 
         let hex_max         =   [9,9,9,9,9,9];      // What should our maximum be for each value in the hex? This can be upgraded to f.
         let hex_parsed      =   '';                 // What color hex value are we?
-        let score_old       = 0;
+        let score_old       =   -1;
+
+        let rub_cost, click_cost, idle_cost;
 
         // Our base stats.
-        let incrementals    =   {
-            rub:5.1,
+        const incrementals    =   {
+            rub:0.1,
             click:1,
             idle:0,
             fairy:25
@@ -286,6 +358,8 @@
             5:[10 , 11 , 12 , 13, 14, 15, 16],
         }
 
+        let     hex_upgrades    =   [0,0,0,0,0,0];
+
         const   upgrade_costs_base = {
             rub:50,
             click:15,
@@ -294,9 +368,7 @@
         }
 
         // What should our hex code be? Transform our score into a valid hexcode for the user
-        function scoreToHex(float_value){
-
-            if(score_old == float_value) return null;
+        function scoreToHex(float_value, hex=false){
 
             let score_tmp = float_value;
             let score_arr = [0,0,0,0,0,0];
@@ -351,9 +423,10 @@
 
             score_old = float_value;
             // Construct our hex value.
+            if(hex == true) return `#${score_arr[0]}${score_arr[1]}${score_arr[2]}${score_arr[3]}${score_arr[4]}${score_arr[5]}`;
             return [score_arr, `#${score_arr[0]}${score_arr[1]}${score_arr[2]}${score_arr[3]}${score_arr[4]}${score_arr[5]}`];
         }
-        function scoreToHexUncapped(float_value){
+        function scoreToHexUncapped(float_value, hex=false){
             let score_tmp = float_value;
             let score_arr = [0,0,0,0,0,0];
             score_arr[5] = Math.max(0, Math.floor(score_tmp-1));     // Let's start it here.
@@ -400,6 +473,7 @@
             });
 
             // Construct our hex value.
+            if(hex == true) return `#${score_arr[0]}${score_arr[1]}${score_arr[2]}${score_arr[3]}${score_arr[4]}${score_arr[5]}`;
             return [score_arr, `#${score_arr[0]}${score_arr[1]}${score_arr[2]}${score_arr[3]}${score_arr[4]}${score_arr[5]}`];
         }
 
@@ -439,83 +513,166 @@
             document.getElementById('headerScoreText').innerHTML = hex_parsed;
         }
 
+        function calculateCosts(){
+            let rub, click, idle;
+            rub = Math.round(5 + (upgrade_costs_base.rub*(upgrades.rub+1/0.65)));
+            if(upgrades.rub > 25 ) rub = Math.floor(rub*1.15);
+            if(upgrades.rub > 50 ) rub = Math.floor(rub*1.4);
+            if(rub > 11631488) rub = 11330000;      // Max it out..
+            rub_cost = rub;     // Return our cost.
+
+            click =   Math.round(10 + (upgrade_costs_base.click*(upgrades.click+1/0.33)));
+            if(upgrades.click > 10 ) click = Math.floor(click*1.2);
+            if(upgrades.click > 30 ) click = Math.floor(click*1.3);
+            if(click > 8631488) click = 5000000;      // Max it out..
+            click_cost = click;     // Return our cost.
+
+            idle =   Math.round(100 + (upgrade_costs_base.idle*(upgrades.idle+2/0.5)));
+            if(upgrades.click > 10 ) idle = Math.floor(idle*1.15);
+            if(upgrades.click > 20 ) idle = Math.floor(idle*1.2);
+            if(upgrades.click > 40 ) idle = Math.floor(idle*1.25);
+            if(idle > 12631488) idle = 12000000;      // Max it out..
+            idle_cost = idle;     // Return our cost.
+        }
         // Upgrade maybe?
         function requestGameplayUpgrade(type){
-            let calc_cost;
-
             // Rub upgrade
-            if(type == 'rub' || type == 1){
-                calc_cost =   Math.round(5 + (upgrade_costs_base.rub*(upgrades.rub+1/0.65)));
-                if(upgrades.rub > 25 ) calc_cost = Math.floor(calc_cost*1.15);
-                if(upgrades.rub > 50 ) calc_cost = Math.floor(calc_cost*1.4);
-                if(calc_cost > 11631488) calc_cost = 11330000;      // Max it out..
+            if(type == 'rub' || type == 1){               
                 // We can buy it!
-                if(calc_cost <= score_float){
+                if(rub_cost <= score_float){
                     score_float -= calc_cost;
                     upgrades.rub++;
                 }
 
                 // Too expensive!
                 else{
-                    //todo
-                }
+                    document.getElementById('upgradeRubBuy').innerHTML = "Too Expensive!";
+                    setTimeout(() => { displayShopInfo(); }, 1000);
+                 }
             }
     
             // Click upgrade
             if(type == 'click' || type == 2){
-                calc_cost =   Math.round(10 + (upgrade_costs_base.click*(upgrades.click+1/0.33)));
-                if(upgrades.click > 10 ) calc_cost = Math.floor(calc_cost*1.2);
-                if(upgrades.click > 30 ) calc_cost = Math.floor(calc_cost*1.3);
-                if(calc_cost > 8631488) calc_cost = 5000000;      // Max it out..
                 // We can buy it!
                 if(calc_cost <= score_float){
                     score_float -= calc_cost;
                     upgrades.click++;
                 }
-
                 // Too expensive!
                 else{
-                    //todo
+                    document.getElementById('upgradeClickBuy').innerHTML = "Too Expensive!";
+                    setTimeout(() => { displayShopInfo(); }, 1000);
                 }
             }
 
             // Idle upgrade
             if(type == 'idle' || type == 3){
-                calc_cost =   Math.round(100 + (upgrade_costs_base.idle*(upgrades.idle+2/0.5)));
-                if(upgrades.click > 10 ) calc_cost = Math.floor(calc_cost*1.15);
-                if(upgrades.click > 20 ) calc_cost = Math.floor(calc_cost*1.2);
-                if(upgrades.click > 40 ) calc_cost = Math.floor(calc_cost*1.25);
-                if(calc_cost > 12631488) calc_cost = 12000000;      // Max it out..
                 // We can buy it!
                 if(calc_cost <= score_float){
                     score_float -= calc_cost;
                     upgrades.idle++;
                 }
-
                 // Too expensive!
                 else{
-                    //todo
+                    document.getElementById('upgradeIdleBuy').innerHTML = "Too Expensive!";
+                    setTimeout(() => { displayShopInfo(); }, 1000);
                 }
             }
         }
 
-        // Add everything we need once everything is loaded in
-        function onLoaded(){
-            
+        function displayShopTab(id){
+            if(id == 1){
+                document.getElementById('upgradesDrawerGameplay').style = 'display:block';
+                document.getElementById('upgradesDrawerHex').style = 'display:none';
+            }
+            if(id == 2){
+                document.getElementById('upgradesDrawerGameplay').style = 'display:none';
+                document.getElementById('upgradesDrawerHex').style = 'display:block';
+            }
         }
 
-        document.getElementById('docBody').addEventListener('mousemove', function(){ incrementByRub(); } );   // Rubbing is active!
-        document.getElementById('docBody').addEventListener('click', function(){ incrementByClick(); } );   // Rubbing is active!
+        function displayShopInfo(){
+            calculateCosts();
+            let hex_values = ['a','b','c','d','e','f'];
+            let hex_maximum = `#`+hex_max[0]+hex_max[1]+hex_max[2]+hex_max[3]+hex_max[4]+hex_max[5];
+            let hex_next = [0,0,0,0,0,0];
+            
+            hex_max.forEach((val, i) => {
+                if(val == '9' || val == 9) hex_next[i] = hex_values[0];
+                else if(val == 'a') hex_next[i] = hex_values[1];
+                else if(val == 'b') hex_next[i] = hex_values[2];
+                else if(val == 'c') hex_next[i] = hex_values[3];
+                else if(val == 'd') hex_next[i] = hex_values[4];
+                else if(val == 'e') hex_next[i] = hex_values[5];
+                else if(val == 'f') hex_next[i] = 'f';
+
+            });
+
+            document.getElementById('upgradeHex1Title').innerHTML = 'Upgrade Max Hex Value';
+            document.getElementById('upgradeHex1Desc').innerHTML = 'Upgrade maximum value from ' + hex_maximum + ' to #' + hex_max[0]+hex_max[1]+hex_max[2]+hex_max[3]+hex_max[4]+hex_next[5];
+            document.getElementById('upgradeHex1Buy').innerHTML = `Buy for <b style="color:${scoreToHexUncapped(hex_costs['5'][hex_upgrades[5]],true)}">${scoreToHexUncapped(hex_costs['5'][hex_upgrades[5]],true)}</b>`;
+            
+            document.getElementById('upgradeHex2Title').innerHTML = 'Upgrade Max Hex Value';
+            document.getElementById('upgradeHex2Desc').innerHTML = 'Upgrade maximum value from ' + hex_maximum + ' to #' + hex_max[0]+hex_max[1]+hex_max[2]+hex_max[3]+hex_next[4]+hex_max[5];
+            document.getElementById('upgradeHex2Buy').innerHTML = `Buy for <b style="color:${scoreToHexUncapped(hex_costs['4'][hex_upgrades[4]],true)}">${scoreToHexUncapped(hex_costs['4'][hex_upgrades[4]],true)}</b>`;
+
+            document.getElementById('upgradeHex3Title').innerHTML = 'Upgrade Max Hex Value';
+            document.getElementById('upgradeHex3Desc').innerHTML = 'Upgrade maximum value from ' + hex_maximum + ' to #' + hex_max[0]+hex_max[1]+hex_max[2]+hex_next[3]+hex_max[4]+hex_max[5];
+            document.getElementById('upgradeHex3Buy').innerHTML = `Buy for <b style="color:${scoreToHexUncapped(hex_costs['3'][hex_upgrades[3]],true)}">${scoreToHexUncapped(hex_costs['3'][hex_upgrades[3]],true)}</b>`;
+
+            document.getElementById('upgradeHex4Title').innerHTML = 'Upgrade Max Hex Value';
+            document.getElementById('upgradeHex4Desc').innerHTML = 'Upgrade maximum value from ' + hex_maximum + ' to #' + hex_max[0]+hex_max[1]+hex_next[2]+hex_max[3]+hex_max[4]+hex_max[5];
+            document.getElementById('upgradeHex4Buy').innerHTML = `Buy for <b style="color:${scoreToHexUncapped(hex_costs['2'][hex_upgrades[2]],true)}">${scoreToHexUncapped(hex_costs['2'][hex_upgrades[2]],true)}</b>`;
+
+            document.getElementById('upgradeHex5Title').innerHTML = 'Upgrade Max Hex Value';
+            document.getElementById('upgradeHex5Desc').innerHTML = 'Upgrade maximum value from ' + hex_maximum + ' to #' + hex_max[0]+hex_next[1]+hex_max[2]+hex_max[3]+hex_max[4]+hex_max[5];
+            document.getElementById('upgradeHex5Buy').innerHTML = `Buy for <b style="color:${scoreToHexUncapped(hex_costs['1'][hex_upgrades[1]],true)}">${scoreToHexUncapped(hex_costs['1'][hex_upgrades[1]],true)}</b>`;
+
+            document.getElementById('upgradeHex6Title').innerHTML = 'Upgrade Max Hex Value';
+            document.getElementById('upgradeHex6Desc').innerHTML = 'Upgrade maximum value from ' + hex_maximum + ' to #' + hex_next[0]+hex_max[1]+hex_max[2]+hex_max[3]+hex_max[4]+hex_max[5];
+            document.getElementById('upgradeHex6Buy').innerHTML = `Buy for <b style="color:${scoreToHexUncapped(hex_costs['0'][hex_upgrades[0]],true)}">${scoreToHexUncapped(hex_costs['0'][hex_upgrades[0]],true)}</b>`;
+
+            document.getElementById('upgradeRubBuy').innerHTML = `Buy for <b style="color:${scoreToHexUncapped(rub_cost,true)}">${scoreToHex(rub_cost,true)}</b>`;
+            document.getElementById('upgradeClickBuy').innerHTML = `Buy for <b style="color:${scoreToHexUncapped(click_cost,true)}">${scoreToHex(click_cost,true)}</b>`;
+            document.getElementById('upgradeIdleBuy').innerHTML = `Buy for <b style="color:${scoreToHexUncapped(idle_cost,true)}">${scoreToHex(idle_cost,true)}</b>`;
+        }
+
+        // Add everything we need once everything is loaded in
+        function onLoaded(){
+            setTimeout(() => {
+                document.getElementById('gameBody').style.opacity = '1';
+                setTimeout(() => {
+                    document.getElementById('gameBody').style = '';
+                }, 500);
+            }, 500);
+            displayShopInfo();
+            displayShopTab(1);
+
+            document.getElementById('upgradeRubBuy').addEventListener('click', function(){ requestGameplayUpgrade('rub'); });
+            document.getElementById('upgradeClickBuy').addEventListener('click', function(){ requestGameplayUpgrade('click'); });
+            document.getElementById('upgradeIdleBuy').addEventListener('click', function(){ requestGameplayUpgrade('idle'); });
+
+            document.getElementById('buttonTabHex').addEventListener('click', function(){ displayShopTab(2); });
+            document.getElementById('buttonTabGame').addEventListener('click', function(){ displayShopTab(1) });
+
+
+            document.getElementById('docBody').addEventListener('mousemove', function(){ incrementByRub(); } );   // Rubbing is active!
+            document.getElementById('docBody').addEventListener('click', function(){ incrementByClick(); } );   // Click is active!
+        }
+
 
         setInterval(() => {
             let update = scoreToHex(score_float);
             let accent = scoreToHexUncapped(score_float/2);
-            score_arr = update[0];      // Update the global score array
+            score = update[0];      // Update the global score array
             hex_parsed = update[1];      // Update global hex
             updateVisibility(hex_parsed, accent[1]);
 
             // Idle increment
             incrementByIdle();
         }, 350);
+
+
+        onLoaded();
     </script>
 </html>
