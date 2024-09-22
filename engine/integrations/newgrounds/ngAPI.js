@@ -119,7 +119,6 @@ async function ngUserSessionJourney(bypass=true){
     // Should we not bypass user signout confirmation?
     if(!bypass){
         if(_ng_user_confirmation == false){
-            document.getElementById('titleButtonNGTxt').innerHTML = 'Really sign out?';
             _ng_user_confirmation = true;
             _ng_timeout = setTimeout(() => {
                 ngUserLoginSuccess();

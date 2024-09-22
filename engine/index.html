@@ -295,7 +295,7 @@
                             <div id="upgradeIdle">
                                 <div id="upgradeIdleImage"></div>
                                 <h2 id="upgradeIdleTitle">Upgrade Idling</h2>
-                                <p id="upgradeIdleDesc">Upgrade your idle power by 4 points per second!</p>
+                                <p id="upgradeIdleDesc">Upgrade your idle power by 10 points per second!</p>
                                 <div id="upgradeIdleBuy" class="ui-button-classic">Buy for Xyz</div>
                             </div>
                         </div>
@@ -371,8 +371,8 @@
 
         // Our base stats.
         const incrementals    =   {
-            rub:0.4,
-            click:1,
+            rub:0.5,
+            click:3,
             idle:0,
             fairy:25
         }
@@ -404,9 +404,9 @@
         let     hex_upgrades    =   [0,0,0,0,0,0];
 
         const   upgrade_costs_base = {
-            rub:50,
-            click:15,
-            idle:160,
+            rub:40,
+            click:10,
+            idle:240,
             fairy:256
         }
 
@@ -416,6 +416,11 @@
             let score_tmp = float_value;
             let score_arr = [0,0,0,0,0,0];
 
+            if(score_float >= 16777216 && hex == true) return '#ffffff';
+            if(score_float >= 16777216 && hex == false){
+                score_arr = ['f','f','f','f','f','f']
+                return [score_arr,'#ffffff'];
+            } 
             score_arr[5] = Math.max(0, Math.floor(score_tmp-1));     // Let's start it here.
             
             // How far over is our 6th value in our score?
@@ -446,12 +451,6 @@
             while(score_arr[1] > hex_max[1]){
                 score_arr[0]++;                 // Add to our next in line score value
                 score_arr[1] -= hex_max[1];     // Remove max value from our score value. 
-            }
-
-            // How far over is our 1st value in our score?
-            while(score_arr[0] > hex_max[0]){
-                if(float_value >= 16777216)console.log('yea you won!');
-                return null
             }
 
             // Time to convert our hex characters above 9 if permitting.
@@ -541,7 +540,7 @@
         // Add to score when idling with active upgrade.
         function incrementByIdle(){
             if(incrementals_active.idle == false) return null    // We shouldn't do anything...
-            score_float += Math.floor((incrementals.idle+upgrades.idle)*2);
+            score_float += Math.floor((incrementals.idle+upgrades.idle)*5);
         }
 
         // Lucky you! Add to score when fairy is clicked on.
@@ -558,22 +557,22 @@
 
         function calculateCosts(){
             let rub, click, idle;
-            rub = Math.round(5 + (upgrade_costs_base.rub*(upgrades.rub+1/0.65)));
-            if(upgrades.rub > 25 ) rub = Math.floor(rub*1.15);
-            if(upgrades.rub > 50 ) rub = Math.floor(rub*1.4);
-            if(rub > 11631488) rub = 11330000;      // Max it out..
+            rub = Math.round(5 + (upgrade_costs_base.rub*(upgrades.rub+1/0.6)));
+            if(upgrades.rub > 35 ) rub = Math.floor(rub*1.05);
+            if(upgrades.rub > 70 ) rub = Math.floor(rub*1.2);
+            if(rub > 11631488) rub = 11000000;      // Max it out..
             rub_cost = rub;     // Return our cost.
 
-            click =   Math.round(10 + (upgrade_costs_base.click*(upgrades.click+1/0.33)));
-            if(upgrades.click > 10 ) click = Math.floor(click*1.2);
-            if(upgrades.click > 30 ) click = Math.floor(click*1.3);
+            click =   Math.round(10 + (upgrade_costs_base.click*(upgrades.click+1/0.3)));
+            if(upgrades.click > 20 ) click = Math.floor(click*1.1);
+            if(upgrades.click > 50 ) click = Math.floor(click*1.2);
             if(click > 8631488) click = 5000000;      // Max it out..
             click_cost = click;     // Return our cost.
 
-            idle =   Math.round(100 + (upgrade_costs_base.idle*(upgrades.idle+2/0.5)));
-            if(upgrades.idle > 10 ) idle = Math.floor(idle*1.15);
-            if(upgrades.idle > 20 ) idle = Math.floor(idle*1.2);
-            if(upgrades.idle > 40 ) idle = Math.floor(idle*1.25);
+            idle =   Math.round(100 + (upgrade_costs_base.idle*(upgrades.idle+2/0.55)));
+            if(upgrades.idle > 20 ) idle = Math.floor(idle*1.1);
+            if(upgrades.idle > 40 ) idle = Math.floor(idle*1.2);
+            if(upgrades.idle > 100 ) idle = Math.floor(idle*1.4);
             if(idle > 12631488) idle = 12000000;      // Max it out..
             idle_cost = idle;     // Return our cost.
         }
@@ -728,7 +727,7 @@
 
             document.getElementById('headerRub').innerHTML = `Rub Power: ${Math.round((incrementals.rub*(1+upgrades.rub))*10)/10}`;
             document.getElementById('headerClick').innerHTML = `Tap Power: ${Math.round(incrementals.click*(1+upgrades.click))}`;
-            document.getElementById('headerIdle').innerHTML = `Idle Power: ${Math.floor((incrementals.idle+upgrades.idle)*2)*2}/s`;
+            document.getElementById('headerIdle').innerHTML = `Idle Power: ${Math.floor((incrementals.idle+upgrades.idle)*2)*5}/s`;
         }
 
         function generateDescriptionHex(p1,p2,p3,p4,p5,p6){
@@ -754,9 +753,6 @@
                     document.getElementById('gameBody').style = '';
                 }, 500);
             }, 500);
-            displayShopInfo();
-            displayShopTab(1);
-
             document.getElementById('upgradeRubBuy').addEventListener('click', function(){ requestGameplayUpgrade('rub'); });
             document.getElementById('upgradeClickBuy').addEventListener('click', function(){ requestGameplayUpgrade('click'); });
             document.getElementById('upgradeIdleBuy').addEventListener('click', function(){ requestGameplayUpgrade('idle'); });
@@ -780,37 +776,52 @@
                 hex_upgrades =  localStorage.getItem('rgbup_hexup').split(',');
                 upgrades =      JSON.parse(localStorage.getItem('rgbup_up'));
             }
-           
+
+            displayShopInfo();
+            displayShopTab(1);
         }
 
         let save_interval = 0;
         setInterval(() => {
             let update = scoreToHex(score_float);
             let accent = scoreToHexUncapped(score_float/2);
+            console.log(update)
             score = update[0];      // Update the global score array
             hex_parsed = update[1];      // Update global hex
             updateVisibility(hex_parsed, accent[1]);
 
             if(score_float >= 16777100) has_maxed = true;
 
+            if(score[0] == 'f'){
+                document.getElementById('header').style.color = '#ddd';
+                document.getElementById('header').style.textShadow = '1px 1px 4px black';
+            }
+            else{
+                document.getElementById('header').style = '';
+            }
+
             // Idle increment
             incrementByIdle();
 
             // Save data
             if(save_interval == 45){
-                ngUnlockMedal(80712);
+                if(ngio.user){
+                    ngUnlockMedal(80712);
+                    if(upgrades.click   >= 10)  ngUnlockMedal(80717);
+                    if(upgrades.rub     >= 10)  ngUnlockMedal(80719);
+                    if(upgrades.idle    >= 10)  ngUnlockMedal(80718);
+                    if(hex_max[5] >= 10 || hex_max[4] >= 10) ngUnlockMedal(80713);
+                    if(hex_max[3] >= 10 || hex_max[2] >= 10) ngUnlockMedal(80714);
+                    if(hex_max[1] >= 10 || hex_max[0] >= 10) ngUnlockMedal(80715);
+                    if(Math.random()*100 >= 89) ngUnlockMedal(80720);
+                    if(has_maxed == true)   ngUnlockMedal(80716);
 
-                if(upgrades.click   >= 10)  ngUnlockMedal(80717);
-                if(upgrades.rub     >= 10)  ngUnlockMedal(80719);
-                if(upgrades.idle    >= 10)  ngUnlockMedal(80718);
-                if(hex_max[5] >= 10 || hex_max[4] >= 10) ngUnlockMedal(80713);
-                if(hex_max[3] >= 10 || hex_max[2] >= 10) ngUnlockMedal(80714);
-                if(hex_max[1] >= 10 || hex_max[0] >= 10) ngUnlockMedal(80715);
-                if(Math.random()*100 >= 89) ngUnlockMedal(80720);
-                if(has_maxed == true)   ngUnlockMedal(80716);
+                    ngPostScore(14176,Math.round(score_float));
+                    ngPostScore(14175,Math.floor(upgrades.click+upgrades.rub+upgrades.idle));
+                }
+                
 
-                ngPostScore(14176,Math.round(score_float));
-                ngPostScore(14175,Math.floor(upgrades.click+upgrades.rub+upgrades.idle));
+
                 save_interval++;
             }
             if(save_interval >= 90){
@@ -820,18 +831,20 @@
                 localStorage.setItem('rgbup_hexup',hex_upgrades);
                 localStorage.setItem('rgbup_up',JSON.stringify(upgrades));
 
+                if(ngio.user){
+                    if(upgrades.click   >= 10)  ngUnlockMedal(80717);
+                    if(upgrades.rub     >= 10)  ngUnlockMedal(80719);
+                    if(upgrades.idle    >= 10)  ngUnlockMedal(80718);
+                    if(hex_max[5] >= 10 || hex_max[4] >= 10) ngUnlockMedal(80713);
+                    if(hex_max[3] >= 10 || hex_max[2] >= 10) ngUnlockMedal(80714);
+                    if(hex_max[1] >= 10 || hex_max[0] >= 10) ngUnlockMedal(80715);
+                    if(Math.random()*100 >= 89) ngUnlockMedal(80720);
+                    if(has_maxed == true)   ngUnlockMedal(80716);
 
-                if(upgrades.click   >= 10)  ngUnlockMedal(80717);
-                if(upgrades.rub     >= 10)  ngUnlockMedal(80719);
-                if(upgrades.idle    >= 10)  ngUnlockMedal(80718);
-                if(hex_max[5] >= 10 || hex_max[4] >= 10) ngUnlockMedal(80713);
-                if(hex_max[3] >= 10 || hex_max[2] >= 10) ngUnlockMedal(80714);
-                if(hex_max[1] >= 10 || hex_max[0] >= 10) ngUnlockMedal(80715);
-                if(Math.random()*100 >= 89) ngUnlockMedal(80720);
-                if(has_maxed == true)   ngUnlockMedal(80716);
-
-                ngPostScore(14176,Math.round(score_float));
-                ngPostScore(14175,Math.floor(upgrades.click+upgrades.rub+upgrades.idle));
+                    ngPostScore(14176,Math.round(score_float));
+                    ngPostScore(14175,Math.floor(upgrades.click+upgrades.rub+upgrades.idle));
+                    ngPostScore(14177,45000);
+                }
 
                 save_interval = 0;
             }else{
